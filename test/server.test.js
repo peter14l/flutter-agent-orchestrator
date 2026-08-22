@@ -13,6 +13,12 @@ import { FlutterPlatformSpecialistAgent } from "../dist/agents/platform-speciali
 import { FlutterCicdSpecialistAgent } from "../dist/agents/cicd-specialist.js";
 import { FlutterGoldenTestSpecialistAgent } from "../dist/agents/golden-test-specialist.js";
 import { FlutterAiSpecialistAgent } from "../dist/agents/ai-specialist.js";
+import { FlutterSecuritySpecialistAgent } from "../dist/agents/security-specialist.js";
+import { FlutterDatabaseSpecialistAgent } from "../dist/agents/database-specialist.js";
+import { FlutterLocalizationSpecialistAgent } from "../dist/agents/localization-specialist.js";
+import { FlutterObservabilitySpecialistAgent } from "../dist/agents/observability-specialist.js";
+import { FlutterDeepLinkSpecialistAgent } from "../dist/agents/deeplink-specialist.js";
+import { FlutterAccessibilitySpecialistAgent } from "../dist/agents/accessibility-specialist.js";
 
 test("FlutterPromptDecomposerAgent asks for platforms if not specified in prompt", () => {
   const agent = new FlutterPromptDecomposerAgent();
@@ -55,7 +61,6 @@ test("FlutterUISpecialistAgent creates responsive Material 3 ConsumerWidget with
   assert.ok(result.stateHolderCode.includes("WorkoutDashboardController"));
   assert.ok(result.modelCode.includes("WorkoutDashboardWorkout"));
   assert.ok(result.widgetCode.includes("surfaceContainer"));
-  // Glassmorphism should NOT be integrated unless explicitly mentioned
   assert.ok(!result.widgetCode.includes("BackdropFilter"));
 });
 
@@ -215,4 +220,90 @@ test("FlutterAiSpecialistAgent scaffolds Google Generative AI streaming module",
   assert.ok(result.serviceCode.includes("GenerativeModel"));
   assert.ok(result.providerCode.includes("copilotAiControllerProvider"));
   assert.ok(result.widgetCode.includes("CopilotAiView"));
+});
+
+// === NEW SPECIALIZED AGENTS TESTS ===
+
+test("FlutterSecuritySpecialistAgent flags hardcoded secrets and generates secure storage", () => {
+  const agent = new FlutterSecuritySpecialistAgent();
+  const result = agent.auditAndHarden({
+    codeSnippet: `const apiKey = "AIzaSyD-123456789"; final prefs = await SharedPreferences.getInstance(); prefs.setString("token", "xyz");`,
+    enableBiometrics: true,
+    enableCertificatePinning: true
+  });
+
+  assert.ok(result.vulnerabilities.length >= 2);
+  assert.ok(result.secureStorageServiceCode.includes("FlutterSecureStorage"));
+  assert.ok(result.biometricAuthServiceCode?.includes("LocalAuthentication"));
+  assert.ok(result.certificatePinningCode?.includes("badCertificateCallback"));
+});
+
+test("FlutterDatabaseSpecialistAgent scaffolds Drift SQLite database and reactive DAOs", () => {
+  const agent = new FlutterDatabaseSpecialistAgent();
+  const result = agent.scaffoldDatabase({
+    databaseName: "Expense",
+    tables: [
+      { name: "Transaction", columns: { id: "integer", title: "text", amount: "real" }, primaryKey: "id" }
+    ],
+    schemaVersion: 1
+  });
+
+  assert.ok(result.driftDatabaseCode.includes("AppExpenseDatabase"));
+  assert.ok(result.driftDatabaseCode.includes("TransactionTable"));
+  assert.ok(result.daoCode.includes("ExpenseDao"));
+});
+
+test("FlutterLocalizationSpecialistAgent generates ARB bundles and RTL locale provider", () => {
+  const agent = new FlutterLocalizationSpecialistAgent();
+  const result = agent.generateLocalization({
+    defaultLocale: "en",
+    supportedLocales: ["en", "es", "ar"],
+    stringKeys: {
+      appTitle: { en: "Expense Tracker", es: "Control de Gastos", ar: "متتبع المصاريف" }
+    }
+  });
+
+  assert.ok(result.l10nYaml.includes("app_localizations.dart"));
+  assert.ok(result.arbEnJson.includes("Expense Tracker"));
+  assert.ok(result.arbArJson?.includes("متتبع المصاريف"));
+  assert.ok(result.localeProviderCode.includes("LocaleNotifier"));
+});
+
+test("FlutterObservabilitySpecialistAgent scaffolds Sentry and HTTP latency interceptors", () => {
+  const agent = new FlutterObservabilitySpecialistAgent();
+  const result = agent.scaffoldObservability({
+    provider: "sentry",
+    customEventNames: ["order_placed", "user_signup"]
+  });
+
+  assert.ok(result.initCode.includes("SentryFlutter.init"));
+  assert.ok(result.analyticsServiceCode.includes("trackOrderPlaced"));
+  assert.ok(result.performanceInterceptorCode?.includes("PerformanceDioInterceptor"));
+});
+
+test("FlutterDeepLinkSpecialistAgent configures go_router and App Links", () => {
+  const agent = new FlutterDeepLinkSpecialistAgent();
+  const result = agent.configureRouting({
+    customScheme: "mywallet",
+    domainHost: "wallet.example.com",
+    routes: [
+      { path: "/transfer/:id", screenName: "TransferScreen", parameters: ["id"] }
+    ]
+  });
+
+  assert.ok(result.goRouterConfigCode.includes("GoRouter"));
+  assert.ok(result.androidAssetLinksJson.includes("delegate_permission/common.handle_all_urls"));
+  assert.ok(result.appleAppSiteAssociationJson.includes("applinks"));
+  assert.ok(result.fcmNotificationHandlerCode.includes("FirebaseMessaging"));
+});
+
+test("FlutterAccessibilitySpecialistAgent flags WCAG violations and generates AccessibleTouchTarget", () => {
+  const agent = new FlutterAccessibilitySpecialistAgent();
+  const result = agent.auditAccessibility({
+    codeSnippet: `IconButton(icon: Icon(Icons.add), onPressed: () {})`
+  });
+
+  assert.ok(result.violations.length >= 1);
+  assert.ok(result.violations[0].wcagRule.includes("WCAG 2.1"));
+  assert.ok(result.accessibleWidgetCode.includes("AccessibleTouchTarget"));
 });

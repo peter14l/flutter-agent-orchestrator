@@ -24,6 +24,12 @@ import { generateFlutterPlatformConfigSchema, handleGenerateFlutterPlatformConfi
 import { generateFlutterCicdSchema, handleGenerateFlutterCicd } from "./tools/cicd-tool.js";
 import { generateFlutterGoldenTestsSchema, handleGenerateFlutterGoldenTests } from "./tools/golden-test-tool.js";
 import { scaffoldFlutterAiModuleSchema, handleScaffoldFlutterAiModule } from "./tools/ai-tool.js";
+import { auditFlutterSecuritySchema, handleAuditFlutterSecurity } from "./tools/security-tool.js";
+import { scaffoldFlutterDatabaseSchema, handleScaffoldFlutterDatabase } from "./tools/database-tool.js";
+import { generateFlutterLocalizationSchema, handleGenerateFlutterLocalization } from "./tools/localization-tool.js";
+import { scaffoldFlutterObservabilitySchema, handleScaffoldFlutterObservability } from "./tools/observability-tool.js";
+import { configureFlutterDeepLinksSchema, handleConfigureFlutterDeepLinks } from "./tools/deeplink-tool.js";
+import { auditFlutterAccessibilitySchema, handleAuditFlutterAccessibility } from "./tools/accessibility-tool.js";
 import { FLUTTER_MCP_PROMPTS } from "./prompts/agent-prompts.js";
 import { FLUTTER_MCP_RESOURCES } from "./resources/templates.js";
 
@@ -31,7 +37,7 @@ export function createFlutterMcpServer(): Server {
   const server = new Server(
     {
       name: "flutter-agent-orchestrator-mcp",
-      version: "1.1.0"
+      version: "1.2.0"
     },
     {
       capabilities: {
@@ -42,7 +48,7 @@ export function createFlutterMcpServer(): Server {
     }
   );
 
-  // 1. Tools Registration
+  // 1. Tools Registration (19 Specialized Tools)
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
       tools: [
@@ -58,7 +64,13 @@ export function createFlutterMcpServer(): Server {
         generateFlutterPlatformConfigSchema,
         generateFlutterCicdSchema,
         generateFlutterGoldenTestsSchema,
-        scaffoldFlutterAiModuleSchema
+        scaffoldFlutterAiModuleSchema,
+        auditFlutterSecuritySchema,
+        scaffoldFlutterDatabaseSchema,
+        generateFlutterLocalizationSchema,
+        scaffoldFlutterObservabilitySchema,
+        configureFlutterDeepLinksSchema,
+        auditFlutterAccessibilitySchema
       ]
     };
   });
@@ -94,6 +106,18 @@ export function createFlutterMcpServer(): Server {
           return await handleGenerateFlutterGoldenTests(args || {});
         case "scaffold_flutter_ai_module":
           return await handleScaffoldFlutterAiModule(args || {});
+        case "audit_flutter_security":
+          return await handleAuditFlutterSecurity(args || {});
+        case "scaffold_flutter_database":
+          return await handleScaffoldFlutterDatabase(args || {});
+        case "generate_flutter_localization":
+          return await handleGenerateFlutterLocalization(args || {});
+        case "scaffold_flutter_observability":
+          return await handleScaffoldFlutterObservability(args || {});
+        case "configure_flutter_deep_links":
+          return await handleConfigureFlutterDeepLinks(args || {});
+        case "audit_flutter_accessibility":
+          return await handleAuditFlutterAccessibility(args || {});
         default:
           throw new McpError(
             ErrorCode.MethodNotFound,
@@ -187,7 +211,6 @@ export async function runServer() {
   console.error("[flutter-agent-orchestrator] MCP Server running on stdio.");
 }
 
-// Start if executed directly
 if (process.argv[1] && import.meta.url === `file:///${process.argv[1].replace(/\\/g, "/")}`) {
   runServer().catch(err => {
     console.error("[flutter-agent-orchestrator] Fatal error:", err);
