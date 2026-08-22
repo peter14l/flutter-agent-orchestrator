@@ -8,6 +8,11 @@ import { FlutterErrorDiagnosticianAgent } from "../dist/agents/error-diagnostici
 import { FlutterTestingSpecialistAgent } from "../dist/agents/testing-specialist.js";
 import { FlutterMasterOrchestratorAgent } from "../dist/agents/master-orchestrator.js";
 import { handleAuditFlutterCode } from "../dist/tools/code-audit-tool.js";
+import { FlutterBridgeSpecialistAgent } from "../dist/agents/bridge-specialist.js";
+import { FlutterPlatformSpecialistAgent } from "../dist/agents/platform-specialist.js";
+import { FlutterCicdSpecialistAgent } from "../dist/agents/cicd-specialist.js";
+import { FlutterGoldenTestSpecialistAgent } from "../dist/agents/golden-test-specialist.js";
+import { FlutterAiSpecialistAgent } from "../dist/agents/ai-specialist.js";
 
 test("FlutterPromptDecomposerAgent asks for platforms if not specified in prompt", () => {
   const agent = new FlutterPromptDecomposerAgent();
@@ -126,4 +131,72 @@ test("handleAuditFlutterCode detects unclosed controllers and print statements",
   const response = await handleAuditFlutterCode({ code: badCode, fileType: "widget" });
   const parsed = JSON.parse(response.content[0].text);
   assert.ok(parsed.totalIssuesFound >= 2);
+});
+
+// === NEW ENHANCEMENT TESTS ===
+
+test("FlutterBridgeSpecialistAgent generates Dio client & WebSocket stream", () => {
+  const agent = new FlutterBridgeSpecialistAgent();
+  const result = agent.generateBridge({
+    serviceName: "Cart",
+    endpoints: [{ name: "getCart", method: "GET", path: "/items", responseType: "CartDto" }],
+    models: [{ name: "CartDto", fields: { id: "String", total: "double" } }]
+  });
+
+  assert.ok(result.dioClientCode.includes("CartApiClient"));
+  assert.ok(result.dartModelsCode.includes("class CartDto"));
+  assert.ok(result.webSocketStreamCode.includes("cartRealtimeStreamProvider"));
+});
+
+test("FlutterPlatformSpecialistAgent generates Info.plist and AndroidManifest with permissions", () => {
+  const agent = new FlutterPlatformSpecialistAgent();
+  const result = agent.generateConfig({
+    projectName: "ScannerApp",
+    targetPlatforms: ["ios", "android", "web"],
+    permissions: ["camera", "photos", "notifications"]
+  });
+
+  assert.ok(result.infoPlistXml.includes("NSCameraUsageDescription"));
+  assert.ok(result.androidManifestXml.includes("android.permission.CAMERA"));
+  assert.ok(result.webIndexHtml.includes("flutter_bootstrap.js"));
+});
+
+test("FlutterCicdSpecialistAgent generates GitHub Actions and Fastlane", () => {
+  const agent = new FlutterCicdSpecialistAgent();
+  const result = agent.generateCicd({
+    projectName: "FinanceApp",
+    targetPlatforms: ["ios", "android", "web"],
+    enableFastlane: true,
+    enableWebDeploy: true
+  });
+
+  assert.ok(result.githubActionsYaml.includes("flutter build appbundle"));
+  assert.ok(result.githubActionsYaml.includes("flutter build web"));
+  assert.ok(result.fastfile?.includes("upload_to_testflight"));
+});
+
+test("FlutterGoldenTestSpecialistAgent generates multi-device snapshot test", () => {
+  const agent = new FlutterGoldenTestSpecialistAgent();
+  const result = agent.generateGoldenTests({
+    screenName: "ProfileScreen",
+    widgetName: "ProfileView",
+    testThemes: ["light", "dark"]
+  });
+
+  assert.ok(result.testCode.includes("Profile Golden Snapshot Tests"));
+  assert.ok(result.testCode.includes("matchesGoldenFile"));
+  assert.ok(result.runCommand.includes("--update-goldens"));
+});
+
+test("FlutterAiSpecialistAgent scaffolds Google Generative AI streaming module", () => {
+  const agent = new FlutterAiSpecialistAgent();
+  const result = agent.scaffoldAiModule({
+    featureName: "Copilot",
+    provider: "google-generative-ai",
+    systemInstruction: "You are a code assistance AI."
+  });
+
+  assert.ok(result.serviceCode.includes("GenerativeModel"));
+  assert.ok(result.providerCode.includes("copilotAiControllerProvider"));
+  assert.ok(result.widgetCode.includes("CopilotAiView"));
 });

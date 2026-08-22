@@ -9,12 +9,17 @@ import { diagnoseFlutterErrorSchema, handleDiagnoseFlutterError } from "./tools/
 import { generateFlutterTestsSchema, handleGenerateFlutterTests } from "./tools/test-generator-tool.js";
 import { orchestrateFlutterProjectSchema, handleOrchestrateFlutterProject } from "./tools/pipeline-orchestrator-tool.js";
 import { auditFlutterCodeSchema, handleAuditFlutterCode } from "./tools/code-audit-tool.js";
+import { generateFlutterApiBridgeSchema, handleGenerateFlutterApiBridge } from "./tools/bridge-tool.js";
+import { generateFlutterPlatformConfigSchema, handleGenerateFlutterPlatformConfig } from "./tools/platform-tool.js";
+import { generateFlutterCicdSchema, handleGenerateFlutterCicd } from "./tools/cicd-tool.js";
+import { generateFlutterGoldenTestsSchema, handleGenerateFlutterGoldenTests } from "./tools/golden-test-tool.js";
+import { scaffoldFlutterAiModuleSchema, handleScaffoldFlutterAiModule } from "./tools/ai-tool.js";
 import { FLUTTER_MCP_PROMPTS } from "./prompts/agent-prompts.js";
 import { FLUTTER_MCP_RESOURCES } from "./resources/templates.js";
 export function createFlutterMcpServer() {
     const server = new Server({
         name: "flutter-agent-orchestrator-mcp",
-        version: "1.0.0"
+        version: "1.1.0"
     }, {
         capabilities: {
             tools: {},
@@ -33,7 +38,12 @@ export function createFlutterMcpServer() {
                 diagnoseFlutterErrorSchema,
                 generateFlutterTestsSchema,
                 orchestrateFlutterProjectSchema,
-                auditFlutterCodeSchema
+                auditFlutterCodeSchema,
+                generateFlutterApiBridgeSchema,
+                generateFlutterPlatformConfigSchema,
+                generateFlutterCicdSchema,
+                generateFlutterGoldenTestsSchema,
+                scaffoldFlutterAiModuleSchema
             ]
         };
     });
@@ -57,6 +67,16 @@ export function createFlutterMcpServer() {
                     return await handleOrchestrateFlutterProject(args || {});
                 case "audit_flutter_codebase":
                     return await handleAuditFlutterCode(args || {});
+                case "generate_flutter_api_bridge":
+                    return await handleGenerateFlutterApiBridge(args || {});
+                case "generate_flutter_platform_config":
+                    return await handleGenerateFlutterPlatformConfig(args || {});
+                case "generate_flutter_cicd_pipeline":
+                    return await handleGenerateFlutterCicd(args || {});
+                case "generate_flutter_golden_tests":
+                    return await handleGenerateFlutterGoldenTests(args || {});
+                case "scaffold_flutter_ai_module":
+                    return await handleScaffoldFlutterAiModule(args || {});
                 default:
                     throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
             }

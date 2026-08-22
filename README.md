@@ -19,9 +19,9 @@ Which platform(s) are you targeting for this Flutter app?
 
 ---
 
-## 🌟 Specialized Agent Team
+## 🌟 Complete Specialized Agent Team (13 Tools)
 
-| Specialized Agent | Role & Tool Name | Key Responsibilities |
+| Specialized Agent | Tool Name | Key Responsibilities |
 | :--- | :--- | :--- |
 | 🧩 **Prompt Architect** | `decompose_flutter_prompt` | Validates target platforms (asks if missing), breaks down prompts into Clean Architecture features (P0/P1/P2), and builds sprint plans. |
 | 🌐 **Dependency Researcher** | `research_flutter_dependencies` | Queries pub.dev, ensures Dart 3.6+ / Flutter 3.27+ compatibility, and generates `pubspec.yaml` & `analysis_options.yaml`. |
@@ -30,13 +30,17 @@ Which platform(s) are you targeting for this Flutter app?
 | 🩺 **Compiler Doctor** | `diagnose_flutter_errors` | Diagnoses RenderFlex overflows, setState during build, pubspec solving conflicts, CocoaPods build errors, and Gradle namespace mismatches. |
 | 🧪 **QA & Test Specialist** | `generate_and_run_flutter_tests` | Generates Unit tests with mocktail, Widget tests with `testWidgets`, and ProviderContainer tests. |
 | 🔍 **Code Quality Auditor** | `audit_flutter_codebase` | Audits Flutter code for unclosed controllers, async calls in `build()`, and performance anti-patterns. |
+| 🌐 **Cross-Bridge Specialist** | `generate_flutter_api_bridge` | Generates type-safe Dio REST clients, matching Dart DTO models, Riverpod providers, and WebSocket realtime streams. |
+| 📱 **Native Platform Specialist** | `generate_flutter_platform_config` | Generates iOS `Info.plist` permission strings, Android `AndroidManifest.xml` permissions, and Web WASM bootstrap. |
+| 🚀 **CI/CD & DevOps Engineer** | `generate_flutter_cicd_pipeline` | Generates multi-platform GitHub Actions workflows (Android AppBundle, iOS IPA, Web WASM), and Fastlane release lanes. |
+| 📸 **Visual Golden Specialist** | `generate_flutter_golden_tests` | Generates multi-device golden snapshot test suites across phone and tablet viewports in Light & Dark modes. |
+| 🤖 **On-Device AI Specialist** | `scaffold_flutter_ai_module` | Scaffolds Google Generative AI (Gemini) SDK streaming integration, Riverpod controllers, and interactive chat views. |
 | 🚀 **Master Orchestrator** | `orchestrate_flutter_project` | Coordinates the full multi-agent pipeline from platform verification to working project structure. |
 
 ---
 
 ## 📦 Installation & Setup
 
-### 1. Build the MCP Server
 ```bash
 git clone https://github.com/peter14l/flutter-agent-orchestrator.git
 cd flutter-agent-orchestrator
@@ -45,12 +49,7 @@ npm run build
 npm test
 ```
 
----
-
-### 2. Antigravity CLI Integration
-
-Add the server to your Antigravity configuration (`mcp_config.json` or `.agents/mcp.json`):
-
+### Antigravity CLI Integration
 ```json
 {
   "mcpServers": {
@@ -62,18 +61,7 @@ Add the server to your Antigravity configuration (`mcp_config.json` or `.agents/
 }
 ```
 
-Or copy the skill to your project's `.agents/skills/` directory:
-```bash
-mkdir -p .agents/skills/flutter-orchestrator
-cp SKILL.md .agents/skills/flutter-orchestrator/
-```
-
----
-
-### 3. OpenCode Integration
-
-Add this entry to your OpenCode configuration (`~/.config/opencode/config.json` or project `opencode.json`):
-
+### OpenCode Integration
 ```json
 {
   "mcp": {
@@ -87,94 +75,3 @@ Add this entry to your OpenCode configuration (`~/.config/opencode/config.json` 
   }
 }
 ```
-
----
-
-## 🛠️ MCP Tools Overview
-
-### 1. `orchestrate_flutter_project`
-Runs the complete multi-agent pipeline from raw prompt to working project structure (verifying platforms first).
-```json
-{
-  "prompt": "Build a finance portfolio manager with interactive charts and offline cache for iOS and Android",
-  "projectName": "finance_tracker",
-  "targetPlatforms": ["android", "ios"],
-  "stateManagement": "riverpod"
-}
-```
-
-### 2. `decompose_flutter_prompt`
-Deconstructs requirements into technical specifications (prompts for platform if omitted).
-```json
-{
-  "prompt": "Build a recipe discovery app with search, favorites, and step-by-step cooking mode",
-  "targetPlatforms": ["android", "ios", "web"]
-}
-```
-
-### 3. `research_flutter_dependencies`
-Generates standard `pubspec.yaml` and `analysis_options.yaml`.
-```json
-{
-  "projectName": "recipe_app",
-  "targetPlatforms": ["android", "ios"],
-  "stateManagement": "riverpod",
-  "packages": ["dio", "supabase", "cached_network_image"]
-}
-```
-
-### 4. `design_flutter_ui`
-Generates responsive Material 3 widgets with Riverpod / Bloc.
-```json
-{
-  "screenName": "RecipeDetailScreen",
-  "targetPlatforms": ["android", "ios", "web"],
-  "layoutDescription": "Header image, ingredients list with checkboxes, nutrition card, and start cooking button."
-}
-```
-
-### 5. `scaffold_flutter_backend`
-Scaffolds Clean Architecture repositories and remote data sources.
-```json
-{
-  "featureName": "Recipe",
-  "stateManagement": "riverpod",
-  "backendProvider": "rest-dio",
-  "database": "shared_preferences"
-}
-```
-
-### 6. `diagnose_flutter_errors`
-Diagnoses compilation errors, overflows, and runtime crashes.
-```json
-{
-  "errorMessage": "A RenderFlex overflowed by 48 pixels on the bottom in Column(children: ...)"
-}
-```
-
-### 7. `generate_and_run_flutter_tests`
-Generates Unit and Widget tests with `testWidgets`.
-```json
-{
-  "className": "RecipeScreen",
-  "testType": "widget",
-  "methodsOrWidgetsToTest": ["render", "tapFavorite"]
-}
-```
-
-### 8. `audit_flutter_codebase`
-Reviews Flutter code for performance and memory leaks.
-```json
-{
-  "code": "class _State extends State<W> { TextEditingController c = TextEditingController(); }",
-  "fileType": "widget"
-}
-```
-
----
-
-## 🧪 Running Tests
-```bash
-npm test
-```
-All 10 unit and integration tests execute using Node's native test runner in ~120ms.
