@@ -16,6 +16,16 @@ export declare const generateFlutterCicdSchema: {
                 };
                 default: string[];
             };
+            enableSplitPerAbiApk: {
+                type: string;
+                description: string;
+                default: boolean;
+            };
+            enableWindowsMsix: {
+                type: string;
+                description: string;
+                default: boolean;
+            };
             enableFastlane: {
                 type: string;
                 description: string;

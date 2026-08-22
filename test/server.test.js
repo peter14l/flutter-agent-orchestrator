@@ -133,8 +133,6 @@ test("handleAuditFlutterCode detects unclosed controllers and print statements",
   assert.ok(parsed.totalIssuesFound >= 2);
 });
 
-// === NEW ENHANCEMENT TESTS ===
-
 test("FlutterBridgeSpecialistAgent generates Dio client & WebSocket stream", () => {
   const agent = new FlutterBridgeSpecialistAgent();
   const result = agent.generateBridge({
@@ -161,18 +159,33 @@ test("FlutterPlatformSpecialistAgent generates Info.plist and AndroidManifest wi
   assert.ok(result.webIndexHtml.includes("flutter_bootstrap.js"));
 });
 
-test("FlutterCicdSpecialistAgent generates GitHub Actions and Fastlane", () => {
+test("FlutterCicdSpecialistAgent generates Split APKs, gh secret set script, and Windows MSIX with test cert", () => {
   const agent = new FlutterCicdSpecialistAgent();
   const result = agent.generateCicd({
     projectName: "FinanceApp",
-    targetPlatforms: ["ios", "android", "web"],
+    targetPlatforms: ["android", "windows", "ios", "web"],
+    enableSplitPerAbiApk: true,
+    enableWindowsMsix: true,
     enableFastlane: true,
     enableWebDeploy: true
   });
 
-  assert.ok(result.githubActionsYaml.includes("flutter build appbundle"));
-  assert.ok(result.githubActionsYaml.includes("flutter build web"));
-  assert.ok(result.fastfile?.includes("upload_to_testflight"));
+  // Verify Split-per-ABI APK build
+  assert.ok(result.githubActionsYaml.includes("flutter build apk --split-per-abi --release"));
+  assert.ok(result.githubActionsYaml.includes("build/app/outputs/flutter-apk/*.apk"));
+
+  // Verify Windows MSIX test cert signing
+  assert.ok(result.githubActionsYaml.includes("runs-on: windows-latest"));
+  assert.ok(result.githubActionsYaml.includes("New-SelfSignedCertificate"));
+  assert.ok(result.githubActionsYaml.includes("msix:create --certificate-path test_cert.pfx"));
+
+  // Verify Local keystore generation & gh secret set script
+  assert.ok(result.keystoreSetupScriptPs1.includes("gh secret set ANDROID_KEYSTORE_BASE64"));
+  assert.ok(result.keystoreSetupScriptSh.includes("gh secret set ANDROID_KEYSTORE_PASSWORD"));
+
+  // Verify Signing Gradle & MSIX Pubspec config
+  assert.ok(result.androidSigningGradleKts.includes("signingConfigs"));
+  assert.ok(result.msixPubspecConfig.includes("msix_config"));
 });
 
 test("FlutterGoldenTestSpecialistAgent generates multi-device snapshot test", () => {

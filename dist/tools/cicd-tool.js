@@ -2,7 +2,7 @@ import { FlutterCicdSpecialistAgent } from "../agents/cicd-specialist.js";
 const agent = new FlutterCicdSpecialistAgent();
 export const generateFlutterCicdSchema = {
     name: "generate_flutter_cicd_pipeline",
-    description: "Generates multi-platform GitHub Actions workflows for Flutter (Android AppBundle, iOS IPA, Web WASM), and Fastlane release lanes.",
+    description: "Generates production multi-platform GitHub Actions workflows for Flutter with Split-per-ABI signed APKs, automated 'gh secret set' keystore script, Windows MSIX packaging with self-signed test certificates, and Fastlane.",
     inputSchema: {
         type: "object",
         properties: {
@@ -16,7 +16,17 @@ export const generateFlutterCicdSchema = {
                     type: "string",
                     enum: ["android", "ios", "web", "macos", "windows", "linux"]
                 },
-                default: ["android", "ios"]
+                default: ["android", "windows", "ios"]
+            },
+            enableSplitPerAbiApk: {
+                type: "boolean",
+                description: "Build split per ABI release APKs (armeabi-v7a, arm64-v8a, x86_64).",
+                default: true
+            },
+            enableWindowsMsix: {
+                type: "boolean",
+                description: "Build and sign Windows MSIX with a test certificate.",
+                default: true
             },
             enableFastlane: {
                 type: "boolean",
@@ -35,7 +45,9 @@ export const generateFlutterCicdSchema = {
 export async function handleGenerateFlutterCicd(args) {
     const spec = {
         projectName: args.projectName,
-        targetPlatforms: args.targetPlatforms || ["android", "ios"],
+        targetPlatforms: args.targetPlatforms || ["android", "windows", "ios"],
+        enableSplitPerAbiApk: args.enableSplitPerAbiApk !== false,
+        enableWindowsMsix: args.enableWindowsMsix !== false,
         enableFastlane: args.enableFastlane !== false,
         enableWebDeploy: args.enableWebDeploy === true
     };

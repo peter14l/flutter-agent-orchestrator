@@ -3,11 +3,18 @@ import { FlutterPlatform } from "../types.js";
 export interface FlutterCicdSpec {
     projectName: string;
     targetPlatforms: FlutterPlatform[];
-    enableFastlane: boolean;
-    enableWebDeploy: boolean;
+    enableSplitPerAbiApk?: boolean;
+    enableWindowsMsix?: boolean;
+    enableFastlane?: boolean;
+    enableWebDeploy?: boolean;
+    androidPackageName?: string;
 }
 export interface FlutterCicdResult {
     githubActionsYaml: string;
+    keystoreSetupScriptPs1: string;
+    keystoreSetupScriptSh: string;
+    androidSigningGradleKts: string;
+    msixPubspecConfig: string;
     fastfile?: string;
     summary: string;
 }
