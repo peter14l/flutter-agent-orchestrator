@@ -1,6 +1,6 @@
 # Flutter Multi-Agent Orchestrator (MCP Server & Skill)
 
-> **Enterprise-grade Multi-Agent System & Model Context Protocol (MCP) Server for building production-ready Flutter & Dart apps across Mobile (iOS/Android), Web (WASM), and Desktop (macOS/Windows/Linux) with Clean Architecture and Riverpod/Bloc.**
+> **Enterprise-grade Multi-Agent System & Model Context Protocol (MCP) Server for building production-ready Flutter & Dart apps across Mobile (iOS/Android), Web (WASM), and Desktop (macOS/Windows/Linux) with Clean Architecture, Riverpod/Bloc, and Hackathon Fast Prototyping.**
 
 ---
 
@@ -19,8 +19,9 @@ Which platform(s) are you targeting for this Flutter app?
 
 ---
 
-## 🌟 Complete Specialized Agent Roster (19 Tools)
+## 🌟 Complete Specialized Agent Roster (23 Tools)
 
+### 🚀 Core Architecture & Engineering Agents
 | Specialized Agent | MCP Tool Name | Description & Key Responsibilities | How to Call |
 | :--- | :--- | :--- | :--- |
 | 🧩 **Prompt Architect** | `decompose_flutter_prompt` | Validates target platforms (asks if missing), breaks down prompts into Clean Architecture features (P0/P1/P2), and builds sprint plans. | `decompose_flutter_prompt({ prompt: "...", targetPlatforms: ["ios", "android"] })` |
@@ -43,6 +44,14 @@ Which platform(s) are you targeting for this Flutter app?
 | ♿ **Accessibility (a11y) Auditor** | `audit_flutter_accessibility` | Audits Flutter widgets for WCAG 2.1 AA compliance, screen reader Semantics, minimum 48x48dp touch targets, and scaffolds `AccessibleTouchTarget`. | `audit_flutter_accessibility({ codeSnippet: "IconButton(icon: Icon(Icons.add), ...)" })` |
 | 🚀 **Master Orchestrator** | `orchestrate_flutter_project` | Coordinates the entire multi-agent pipeline from platform verification to working project structure. | `orchestrate_flutter_project({ prompt: "...", targetPlatforms: ["android", "ios"] })` |
 
+### ⚡ Hackathon Fast-Prototyping Agents
+| Specialized Agent | MCP Tool Name | Description & Key Responsibilities | How to Call |
+| :--- | :--- | :--- | :--- |
+| 🎭 **Demo Data & Mock Factory** | `generate_flutter_mock_factory` | Generates deterministic domain mock data factories, fake entities, and in-memory simulated Riverpod repositories for instant UI prototyping. | `generate_flutter_mock_factory({ domainName: "Product", itemCount: 10 })` |
+| 🔐 **Auth & Onboarding Specialist** | `scaffold_flutter_auth_flow` | Scaffolds an animated Onboarding carousel (PageView with dots), Material 3 Social login UI (Google/Apple/Email), and token-persisting Riverpod Auth controllers. | `scaffold_flutter_auth_flow({ appName: "HackathonApp" })` |
+| 📈 **Charts & Data Storytelling** | `generate_flutter_charts` | Scaffolds interactive animated Line charts, Bar graphs, and Donut charts via `fl_chart` with gradient fills and tooltips. | `generate_flutter_charts({ chartTitle: "Revenue Trends", chartType: "line" })` |
+| 🛡️ **Hackathon Demo Resilience** | `scaffold_flutter_offline_resilience` | Guarantees zero crashes during live stage pitches by wrapping network repositories in an automatic fallback interceptor that catches Wi-Fi drops and seamlessly serves cached mock data. | `scaffold_flutter_offline_resilience({ enableDemoMockFallback: true })` |
+
 ---
 
 ## 📦 Installation & Setup
@@ -53,31 +62,4 @@ cd flutter-agent-orchestrator
 npm install
 npm run build
 npm test
-```
-
-### Antigravity CLI Integration
-```json
-{
-  "mcpServers": {
-    "flutter-orchestrator": {
-      "command": "node",
-      "args": ["C:/Users/LOQ/flutter-agent-orchestrator/dist/index.js"]
-    }
-  }
-}
-```
-
-### OpenCode Integration
-```json
-{
-  "mcp": {
-    "servers": {
-      "flutter-orchestrator": {
-        "command": "node",
-        "args": ["C:/Users/LOQ/flutter-agent-orchestrator/dist/index.js"],
-        "enabled": true
-      }
-    }
-  }
-}
 ```

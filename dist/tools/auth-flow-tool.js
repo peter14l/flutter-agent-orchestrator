@@ -1,0 +1,41 @@
+import { FlutterAuthFlowSpecialistAgent } from "../agents/auth-flow-specialist.js";
+const agent = new FlutterAuthFlowSpecialistAgent();
+export const scaffoldFlutterAuthFlowSchema = {
+    name: "scaffold_flutter_auth_flow",
+    description: "Scaffolds an instant animated Onboarding carousel (PageView with dots), Material 3 Social login UI (Google/Apple/Email), and token-persisting Riverpod Auth controllers.",
+    inputSchema: {
+        type: "object",
+        properties: {
+            appName: {
+                type: "string",
+                description: "Application name."
+            },
+            enableSocialLogins: {
+                type: "boolean",
+                default: true
+            },
+            enableOnboardingCarousel: {
+                type: "boolean",
+                default: true
+            }
+        },
+        required: ["appName"]
+    }
+};
+export async function handleScaffoldFlutterAuthFlow(args) {
+    const spec = {
+        appName: args.appName,
+        enableSocialLogins: args.enableSocialLogins !== false,
+        enableOnboardingCarousel: args.enableOnboardingCarousel !== false
+    };
+    const result = agent.scaffoldAuthFlow(spec);
+    return {
+        content: [
+            {
+                type: "text",
+                text: JSON.stringify(result, null, 2)
+            }
+        ]
+    };
+}
+//# sourceMappingURL=auth-flow-tool.js.map

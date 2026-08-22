@@ -19,6 +19,10 @@ import { FlutterLocalizationSpecialistAgent } from "../dist/agents/localization-
 import { FlutterObservabilitySpecialistAgent } from "../dist/agents/observability-specialist.js";
 import { FlutterDeepLinkSpecialistAgent } from "../dist/agents/deeplink-specialist.js";
 import { FlutterAccessibilitySpecialistAgent } from "../dist/agents/accessibility-specialist.js";
+import { FlutterMockFactorySpecialistAgent } from "../dist/agents/mock-factory-specialist.js";
+import { FlutterAuthFlowSpecialistAgent } from "../dist/agents/auth-flow-specialist.js";
+import { FlutterChartsSpecialistAgent } from "../dist/agents/charts-specialist.js";
+import { FlutterOfflineResilienceSpecialistAgent } from "../dist/agents/offline-resilience-specialist.js";
 
 test("FlutterPromptDecomposerAgent asks for platforms if not specified in prompt", () => {
   const agent = new FlutterPromptDecomposerAgent();
@@ -222,8 +226,6 @@ test("FlutterAiSpecialistAgent scaffolds Google Generative AI streaming module",
   assert.ok(result.widgetCode.includes("CopilotAiView"));
 });
 
-// === NEW SPECIALIZED AGENTS TESTS ===
-
 test("FlutterSecuritySpecialistAgent flags hardcoded secrets and generates secure storage", () => {
   const agent = new FlutterSecuritySpecialistAgent();
   const result = agent.auditAndHarden({
@@ -306,4 +308,53 @@ test("FlutterAccessibilitySpecialistAgent flags WCAG violations and generates Ac
   assert.ok(result.violations.length >= 1);
   assert.ok(result.violations[0].wcagRule.includes("WCAG 2.1"));
   assert.ok(result.accessibleWidgetCode.includes("AccessibleTouchTarget"));
+});
+
+// === HACKATHON ACCELERATOR TESTS ===
+
+test("FlutterMockFactorySpecialistAgent generates deterministic mock data and repository", () => {
+  const agent = new FlutterMockFactorySpecialistAgent();
+  const result = agent.generateFactory({
+    domainName: "Product",
+    itemCount: 5,
+    fields: { id: "uuid", title: "title", price: "price", status: "status" }
+  });
+
+  assert.ok(result.factoryCode.includes("ProductMockFactory"));
+  assert.ok(result.mockRepositoryCode.includes("MockProductRepository"));
+});
+
+test("FlutterAuthFlowSpecialistAgent scaffolds onboarding, login, and AuthController", () => {
+  const agent = new FlutterAuthFlowSpecialistAgent();
+  const result = agent.scaffoldAuthFlow({
+    appName: "HackathonApp",
+    enableSocialLogins: true,
+    enableOnboardingCarousel: true
+  });
+
+  assert.ok(result.onboardingScreenCode.includes("OnboardingScreen"));
+  assert.ok(result.loginScreenCode.includes("LoginScreen"));
+  assert.ok(result.authControllerCode.includes("AuthController"));
+});
+
+test("FlutterChartsSpecialistAgent generates fl_chart line chart widget", () => {
+  const agent = new FlutterChartsSpecialistAgent();
+  const result = agent.generateChart({
+    chartTitle: "Growth Metrics",
+    chartType: "line",
+    dataPoints: [{ label: "Q1", value: 40 }, { label: "Q2", value: 80 }]
+  });
+
+  assert.ok(result.chartWidgetCode.includes("InteractiveLineChart"));
+  assert.ok(result.chartWidgetCode.includes("fl_chart"));
+});
+
+test("FlutterOfflineResilienceSpecialistAgent scaffolds demo resilience interceptor", () => {
+  const agent = new FlutterOfflineResilienceSpecialistAgent();
+  const result = agent.scaffoldResilience({
+    enableDemoMockFallback: true
+  });
+
+  assert.ok(result.resilienceInterceptorCode.includes("DemoResilienceInterceptor"));
+  assert.ok(result.resilientRepositoryWrapperCode.includes("runWithDemoFallback"));
 });
