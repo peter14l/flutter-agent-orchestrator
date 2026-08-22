@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.schema.json",
+  "name": "flutter-agent-orchestrator",
+  "version": "1.0.0",
+  "description": "Multi-agent Flutter & Dart Development Orchestrator with Riverpod, Bloc, and Clean Architecture",
+  "mcp": {
+    "servers": {
+      "flutter-orchestrator": {
+        "command": "node",
+        "args": ["dist/index.js"],
+        "enabled": true,
+        "env": {
+          "NODE_ENV": "production"
+        }
+      }
+    }
+  },
+  "prompts": [
+    {
+      "name": "orchestrate-flutter-app",
+      "description": "Spawns all specialized agents to architect, scaffold, and test a Flutter application (confirming target platforms first)",
+      "content": "Use the orchestrate_flutter_project tool to build a complete application for: {{prompt}}"
+    }
+  ]
+}
