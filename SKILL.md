@@ -1,6 +1,6 @@
 # Flutter Multi-Agent Orchestrator (MCP Server & Skill)
 
-> **Enterprise-grade Multi-Agent System & Model Context Protocol (MCP) Server for building production-ready Flutter & Dart apps across Mobile (iOS/Android), Web (WASM), and Desktop (macOS/Windows/Linux) with Clean Architecture, Riverpod/Bloc, and Hackathon Fast Prototyping.**
+> **Enterprise-grade Multi-Agent System & Model Context Protocol (MCP) Server for building production-ready Flutter & Dart apps across Mobile (iOS/Android), Web (WASM), and Desktop (macOS/Windows/Linux) with Clean Architecture, Riverpod/Bloc, Dynamic Design/Architecture Document Blueprints, and Hackathon Fast Prototyping.**
 
 ---
 
@@ -19,7 +19,12 @@ Which platform(s) are you targeting for this Flutter app?
 
 ---
 
-## 🌟 Complete Specialized Agent Roster (23 Tools)
+## 🌟 Complete Specialized Agent Roster (24 Tools)
+
+### 📋 Project Specifications, Blueprints & Documentation Agents
+| Specialized Agent | MCP Tool Name | Description & Key Responsibilities | How to Call |
+| :--- | :--- | :--- | :--- |
+| 📑 **Blueprint & Spec Architect** | `scaffold_flutter_project_docs` | Generates dynamic, prompt-tailored `PRD.md`, `architecture.md`, `rules.md`, `phases.md`, `design.md`, and `memory.md`. Checks if files already exist before writing to prevent overwriting manual notes. | `scaffold_flutter_project_docs({ projectName: "MyApp", appDescription: "..." })` |
 
 ### 🚀 Core Architecture & Engineering Agents
 | Specialized Agent | MCP Tool Name | Description & Key Responsibilities | How to Call |

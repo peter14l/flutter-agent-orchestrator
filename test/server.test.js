@@ -23,6 +23,7 @@ import { FlutterMockFactorySpecialistAgent } from "../dist/agents/mock-factory-s
 import { FlutterAuthFlowSpecialistAgent } from "../dist/agents/auth-flow-specialist.js";
 import { FlutterChartsSpecialistAgent } from "../dist/agents/charts-specialist.js";
 import { FlutterOfflineResilienceSpecialistAgent } from "../dist/agents/offline-resilience-specialist.js";
+import { FlutterDocBlueprintSpecialistAgent } from "../dist/agents/doc-blueprint-specialist.js";
 
 test("FlutterPromptDecomposerAgent asks for platforms if not specified in prompt", () => {
   const agent = new FlutterPromptDecomposerAgent();
@@ -310,8 +311,6 @@ test("FlutterAccessibilitySpecialistAgent flags WCAG violations and generates Ac
   assert.ok(result.accessibleWidgetCode.includes("AccessibleTouchTarget"));
 });
 
-// === HACKATHON ACCELERATOR TESTS ===
-
 test("FlutterMockFactorySpecialistAgent generates deterministic mock data and repository", () => {
   const agent = new FlutterMockFactorySpecialistAgent();
   const result = agent.generateFactory({
@@ -357,4 +356,27 @@ test("FlutterOfflineResilienceSpecialistAgent scaffolds demo resilience intercep
 
   assert.ok(result.resilienceInterceptorCode.includes("DemoResilienceInterceptor"));
   assert.ok(result.resilientRepositoryWrapperCode.includes("runWithDemoFallback"));
+});
+
+test("FlutterDocBlueprintSpecialistAgent generates PRD, architecture, rules, phases, design and memory docs", () => {
+  const agent = new FlutterDocBlueprintSpecialistAgent();
+  const result = agent.scaffoldDocuments({
+    projectName: "PulseFit",
+    appDescription: "An AI-powered fitness workout and nutrition tracker with real-time biometric metrics and dark mode OLED palette.",
+    targetPlatforms: ["android", "ios"],
+    projectType: "production",
+    preferredArchitecture: "Clean Architecture with Riverpod",
+    designPreferences: {
+      colorTheme: "OLED Pitch Black & Neon Emerald",
+      navigationStyle: "Bottom Navigation with Floating Action Center"
+    }
+  });
+
+  assert.ok(result.documents.prdMd?.includes("Product Requirements Document (PRD): PulseFit"));
+  assert.ok(result.documents.architectureMd?.includes("System Architecture: PulseFit"));
+  assert.ok(result.documents.rulesMd?.includes("Engineering Guidelines & Code Quality Rules"));
+  assert.ok(result.documents.phasesMd?.includes("Milestone 1: Foundation"));
+  assert.ok(result.documents.designMd?.includes("OLED Pitch Black & Neon Emerald"));
+  assert.ok(result.documents.memoryMd?.includes("Project Memory & Architectural Decision Records"));
+  assert.strictEqual(result.generatedFiles.length, 6);
 });

@@ -24,12 +24,13 @@ import { generateFlutterMockFactorySchema, handleGenerateFlutterMockFactory } fr
 import { scaffoldFlutterAuthFlowSchema, handleScaffoldFlutterAuthFlow } from "./tools/auth-flow-tool.js";
 import { generateFlutterChartsSchema, handleGenerateFlutterCharts } from "./tools/charts-tool.js";
 import { scaffoldFlutterOfflineResilienceSchema, handleScaffoldFlutterOfflineResilience } from "./tools/offline-resilience-tool.js";
+import { scaffoldFlutterProjectDocsSchema, handleScaffoldFlutterProjectDocs } from "./tools/doc-blueprint-tool.js";
 import { FLUTTER_MCP_PROMPTS } from "./prompts/agent-prompts.js";
 import { FLUTTER_MCP_RESOURCES } from "./resources/templates.js";
 export function createFlutterMcpServer() {
     const server = new Server({
         name: "flutter-agent-orchestrator-mcp",
-        version: "1.3.0"
+        version: "1.4.0"
     }, {
         capabilities: {
             tools: {},
@@ -37,7 +38,7 @@ export function createFlutterMcpServer() {
             resources: {}
         }
     });
-    // 1. Tools Registration (23 Specialized Tools)
+    // 1. Tools Registration (24 Specialized Tools)
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         return {
             tools: [
@@ -63,7 +64,8 @@ export function createFlutterMcpServer() {
                 generateFlutterMockFactorySchema,
                 scaffoldFlutterAuthFlowSchema,
                 generateFlutterChartsSchema,
-                scaffoldFlutterOfflineResilienceSchema
+                scaffoldFlutterOfflineResilienceSchema,
+                scaffoldFlutterProjectDocsSchema
             ]
         };
     });
@@ -117,6 +119,8 @@ export function createFlutterMcpServer() {
                     return await handleGenerateFlutterCharts(args || {});
                 case "scaffold_flutter_offline_resilience":
                     return await handleScaffoldFlutterOfflineResilience(args || {});
+                case "scaffold_flutter_project_docs":
+                    return await handleScaffoldFlutterProjectDocs(args || {});
                 default:
                     throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
             }
